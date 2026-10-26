@@ -80,22 +80,24 @@ body { margin: 0; -webkit-text-size-adjust: 100%; background: var(--ivory); colo
 <style scoped>
 .qna {
   width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
   background: var(--ivory);
+  height: 100vh; /* dvh 미지원 브라우저용 */
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   font-family: 'Pretendard', sans-serif;
   font-weight: 500;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
-.viewport { overflow: hidden; }
-.track { display: flex; transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.viewport { flex: 1; min-height: 0; overflow: hidden; }
+.track { display: flex; height: 100%; transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
 @media (prefers-reduced-motion: reduce) { .track { transition: none; } }
 .page {
   flex: 0 0 100%;
   box-sizing: border-box;
-  height: max(440px, 70dvh);
+  height: 100%;
   padding: 28px 20px 12px;
   display: flex;
   flex-direction: column;
