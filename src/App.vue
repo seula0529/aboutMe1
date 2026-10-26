@@ -107,10 +107,14 @@ body { margin: 0; -webkit-text-size-adjust: 100%; background: var(--ivory); colo
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
-.cover { position: relative; align-items: center; justify-content: flex-start; padding-top: 56px; text-align: center; background: var(--beige); }
+.cover { position: relative; align-items: center; justify-content: flex-start; padding-top: 60px; text-align: center; background: var(--beige); }
 .cover > :not(.cover-video) { position: relative; }
-.cover-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.cover { isolation: isolate; }
+.cover-video { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+/* 텍스트 영역 딤드 — 상단 0.3에서 수직 중간 0으로 사라짐 */
+.cover::after { content: ''; position: absolute; inset: 0 0 50% 0; z-index: -1; background: linear-gradient(to bottom, rgb(255 253 247 / 0.3), rgb(255 253 247 / 0)); pointer-events: none; }
 .title { margin: 0 0 20px; font-family: 'GumiRomance', sans-serif; font-weight: normal; font-size: 45px; color: var(--green); }
+.cover .title { text-shadow: 0 0 20px var(--ivory), 0 0 20px var(--ivory); }
 .sub { margin: 0; font-size: 20px; }
 .num { margin-bottom:10px;color: var(--brown); font-size: 15px; }
 .question { margin-bottom:20px;font-size: 20px; line-height: 1.5; word-break: keep-all; }
