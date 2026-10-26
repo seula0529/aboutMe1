@@ -23,7 +23,7 @@ const questions = [
 const answers = ref(questions.map(() => ''))
 const page = ref(0) // 0: 표지, 1~16: 질문, 17: 모아보기
 const last = questions.length + 1
-const character = `${import.meta.env.BASE_URL}character.svg`
+const coverVideo = `${import.meta.env.BASE_URL}cover.mp4`
 
 const nextLabel = computed(() =>
   page.value === 0 ? '시작하기' : page.value === questions.length ? '모아보기' : '다음 질문'
@@ -36,7 +36,7 @@ const nextLabel = computed(() =>
       <div class="track" :style="{ transform: `translateX(-${page * 100}%)` }">
         <!-- 표지 -->
         <div class="page cover" :inert="page !== 0">
-          <img :src="character" alt="브랜드 캐릭터" class="character" />
+          <video class="cover-video" :src="coverVideo" autoplay muted loop playsinline aria-hidden="true" />
           <h2 class="title">즉문즉답</h2>
           <p class="sub">{{ questions.length }}개의 질문, 떠오르는 대로 답해 주세요</p>
         </div>
@@ -59,7 +59,7 @@ const nextLabel = computed(() =>
       </div>
     </div>
 
-    <nav class="nav">
+    <nav class="nav" :class="{ 'on-cover': page === 0 }">
       <button v-if="page > 0" class="btn ghost" @click="page--">이전 질문</button>
       <button v-if="page < last" class="btn" @click="page++">{{ nextLabel }}</button>
     </nav>
@@ -79,6 +79,7 @@ body { margin: 0; -webkit-text-size-adjust: 100%; background: var(--ivory); colo
 
 <style scoped>
 .qna {
+  position: relative;
   width: 100%;
   background: var(--ivory);
   height: 100vh; /* dvh 미지원 브라우저용 */
@@ -98,20 +99,21 @@ body { margin: 0; -webkit-text-size-adjust: 100%; background: var(--ivory); colo
   flex: 0 0 100%;
   box-sizing: border-box;
   height: 100%;
-  padding: 28px 20px 12px;
+  /* 하단 여백 = 버튼 영역 높이 (버튼이 페이지 위에 떠 있음) */
+  padding: 28px 20px calc(92px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
-  gap: 14px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
-.cover { align-items: center; justify-content: center; text-align: center; background: var(--beige); }
-.character { width: min(46vw, 180px); height: auto; aspect-ratio: 1; }
-.title { margin: 0; font-family: 'GumiRomance', sans-serif; font-weight: normal; font-size: 36px; color: var(--green); }
-.sub { margin: 0; font-size: 15px; }
-.num { color: var(--brown); font-size: 13px; }
-.question { font-size: 19px; line-height: 1.5; word-break: keep-all; }
+.cover { position: relative; align-items: center; justify-content: flex-start; padding-top: 56px; text-align: center; background: var(--beige); }
+.cover > :not(.cover-video) { position: relative; }
+.cover-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.title { margin: 0 0 20px; font-family: 'GumiRomance', sans-serif; font-weight: normal; font-size: 45px; color: var(--green); }
+.sub { margin: 0; font-size: 20px; }
+.num { margin-bottom:10px;color: var(--brown); font-size: 15px; }
+.question { margin-bottom:20px;font-size: 20px; line-height: 1.5; word-break: keep-all; }
 .answer {
   flex: 1;
   min-height: 160px;
@@ -128,15 +130,16 @@ body { margin: 0; -webkit-text-size-adjust: 100%; background: var(--ivory); colo
 }
 .answer:focus { outline: none; border-color: var(--green); }
 .answer::placeholder { color: var(--brown); }
-.summary .title { font-size: 30px; }
-.item { border-bottom: 1px solid var(--beige); }
+.summary .title { margin-bottom:20px;font-size: 35px; text-align: center; }
+.item {padding:5px 0; }
+.item + .item{border-top: 1px solid var(--beige); }
 .item summary {
   cursor: pointer;
   display: flex;
   gap: 12px;
   align-items: center;
-  min-height: 48px;
-  padding: 10px 8px;
+  min-height: 50px;
+  padding: 10px;
   border-radius: 12px;
   list-style: none;
   line-height: 1.5;
@@ -158,10 +161,17 @@ body { margin: 0; -webkit-text-size-adjust: 100%; background: var(--ivory); colo
   white-space: pre-wrap;
 }
 .nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   gap: 10px;
   padding: 12px 20px calc(16px + env(safe-area-inset-bottom));
+  background: var(--ivory);
+  transition: background-color 0.4s;
 }
+.nav.on-cover { background: transparent; }
 .btn {
   flex: 1;
   min-height: 52px;
