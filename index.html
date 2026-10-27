@@ -4,14 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>즉문즉답</title>
-    <style>
-      @font-face { font-family: 'Pretendard'; font-weight: 500; src: url('fonts/Pretendard-Medium.ttf') format('truetype'); font-display: swap; }
-      @font-face { font-family: 'GumiRomance'; src: url('fonts/Gumi%20Romance.ttf') format('truetype'); font-display: swap; }
-      @font-face { font-family: 'OwnglyphYuntaeng'; src: url('fonts/%EC%98%A8%EA%B8%80%EC%9E%8E%20%EC%9C%A4%ED%83%B1%EC%B2%B4.ttf') format('truetype'); font-display: swap; }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <section class="qna">
+      <!-- 표지 -->
+      <div class="page cover">
+        <video class="cover-video" src="cover.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+        <h1 class="title">즉문즉답</h1>
+        <p class="sub" id="sub"></p>
+      </div>
+      <!-- 질문 페이지는 script.js에서 nav 앞에 생성 -->
+
+      <nav class="nav on-cover" id="nav">
+        <button class="btn ghost" id="prevBtn" hidden>이전 질문</button>
+        <button class="btn" id="nextBtn">시작하기</button>
+      </nav>
+    </section>
+    <script src="script.js"></script>
   </body>
 </html>
